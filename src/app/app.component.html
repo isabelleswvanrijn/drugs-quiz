@@ -1,0 +1,100 @@
+<div class="content">
+  <div class="container">
+    <div *ngIf="isLoading" class="loadingGif row">
+      <div class="col-xs-3 col-xs-offset-5">
+          <img [src]="loadingGifPath"/>
+          <p>{{ loadingText }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && quizStarted" class="row">
+    <div *ngIf="questions[selectedQuestionIndex]" class="col-md-6 col-xs-11 col-centered question-container">
+      <p class="question-title">{{questions[selectedQuestionIndex].vraag}}</p>
+      <hr>
+      <div class="question-answer-padding" (click)="selectAnswer('a')">
+        <div class="question-icon">
+          <span>A</span>
+        </div>
+        <span class="question-answer-text">{{questions[selectedQuestionIndex].antwoorden.a}}</span>
+      </div>
+      <div class="question-answer-padding" (click)="selectAnswer('b')">
+        <div class="question-icon">
+            <span>B</span>
+        </div>
+        <span class="question-answer-text">{{questions[selectedQuestionIndex].antwoorden.b}}</span>
+      </div>
+      <div class="question-answer-padding">
+        <div class="question-icon" (click)="selectAnswer('c')">
+            <span>C</span>
+        </div>
+        <span class="question-answer-text">{{questions[selectedQuestionIndex].antwoorden.c}}</span>
+      </div>
+      <div *ngIf="quizOver">
+          <hr>
+          <div>Je hebt antwoord {{selectedAnswers[selectedQuestionIndex].selected}} gegeven, dit was {{selectedAnswers[selectedQuestionIndex].correct}}!</div>
+          <div *ngIf="selectedAnswers[selectedQuestionIndex].correct === 'fout'">
+            Het goede antwoord was {{questions[selectedQuestionIndex].goedAntw}}.
+          </div>
+          <br/>
+          <button class="btn btn-success" (click)="selectAnswer('geen')">Volgende</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="endModal" tabindex="-1" role="dialog" aria-labelledby="endModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Quiz</h5>
+      </div>
+      <div class="modal-body">
+       De quiz is over! Je hebt {{ amountCorrect }} van de 10 vragen goed!
+      </div>
+      <div class="modal-footer modal-footer--no-align">
+          <p style="display: inline-block;">Door Isabelle van Rijn.</p>
+          <button type="button" id="endModalOpen" class="btn btn-secondary hidden" data-toggle="modal" data-target="#endModal">open modal</button>
+          <button style="float: right;" type="button" data-dismiss="modal" (click)="selectedQuestionIndex = 0" class="btn btn-primary">Bekijk je antwoorden</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="resetModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Quiz</h5>
+      </div>
+      <div class="modal-body">
+        De quiz is over, druk op de knop "begin opnieuw" om opnieuw te beginnen met andere vragen.
+      </div>
+      <div class="modal-footer modal-footer--no-align">
+          <p style="display: inline-block;">Door Isabelle van Rijn.</p>
+          <button type="button" id="resetModalOpen" class="btn btn-secondary hidden" data-toggle="modal" data-target="#resetModal">open modal</button>
+          <button style="float: right;" type="button" data-dismiss="modal" (click)="reload();" class="btn btn-primary">Begin opnieuw (hij is leuk he?)</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="startModal" tabindex="-1" role="dialog" aria-labelledby="startModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Quiz</h5>
+      </div>
+      <div class="modal-body">
+        De volgende quiz gaat jouw kennis over drugs testen. <br/>
+        Het gaat over heel veel verschillenfe soorten drugs. <br/>
+        Ga maar kijken wat jij weet en kom meer over de drugs te weten.
+      </div>
+    <div class="modal-footer modal-footer--no-align">
+      <p style="display: inline-block;">Door Isabelle van Rijn.</p>
+      <button type="button" id="startModalOpen" class="btn btn-secondary hidden" data-toggle="modal" data-target="#startModal">open modal</button>
+      <button style="float: right;" type="button" data-dismiss="modal" (click)="quizStarted = true" class="btn btn-primary">Start Quiz</button>
+    </div>
+    </div>
+  </div>
+</div>
